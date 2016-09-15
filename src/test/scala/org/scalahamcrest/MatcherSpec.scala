@@ -1,6 +1,7 @@
 package org.scalahamcrest
 
 import org.scalatest.{FunSpec, Matchers}
+
 import org.scalahamcrest.Asserter.assertThat
 
 class MatcherSpec extends FunSpec with Matchers {
@@ -16,15 +17,15 @@ class MatcherSpec extends FunSpec with Matchers {
   }
 
   describe("InstanceOf") {
-    assertThat(2, InstanceOf(classOf[Int]))
-    assertThat(2, Not(InstanceOf(classOf[String])))
-    assertThat(2, !InstanceOf(classOf[String]))
+    assertThat(2, InstanceOf[Int])
+    assertThat(2, Not(InstanceOf[String]))
+    assertThat(2, !InstanceOf[String])
 
-    assertThat("string", InstanceOf(classOf[String]))
-    assertThat("string", Not(InstanceOf(classOf[Int])))
+    assertThat("string", InstanceOf[String])
+    assertThat("string", !InstanceOf[Int])
 
-    assertThat(Nil, InstanceOf(classOf[List[_]]))
-    assertThat(None, InstanceOf(classOf[Option[_]]))
+    assertThat(Nil, InstanceOf[List[_]])
+    assertThat(None, InstanceOf[Option[_]])
   }
 
   describe("Same") {
@@ -37,8 +38,8 @@ class MatcherSpec extends FunSpec with Matchers {
   }
 
   describe("AllOf") {
-    assertThat(2, AllOf(Always, InstanceOf(classOf[Int]), Is(2), EqualTo(2)))
-    assertThat(2, Always && InstanceOf(classOf[Int]) && Is(2) && EqualTo(2))
+    assertThat(2, AllOf(Always, InstanceOf[Int], Is(2), EqualTo(2)))
+    assertThat(2, Always && InstanceOf[Int] && Is(2) && EqualTo(2))
   }
 
   describe("StringOps") {

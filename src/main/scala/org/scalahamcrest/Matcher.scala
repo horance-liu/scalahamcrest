@@ -1,13 +1,20 @@
 package org.scalahamcrest
 
+import scala.reflect.ClassTag
+
 class Matcher[-A](pred: A => Boolean) extends (A => Boolean) {
   self =>
 
-  def &&[A1 <: A](that: Matcher[A1]) = new Matcher[A1](x => self(x) && that(x))
-  def ||[A1 <: A](that: Matcher[A1]) = new Matcher[A1](x => self(x) || that(x))
-  def unary_![A1 <: A] = new Matcher[A1](x => !self(x))
+  def &&[A1 <: A](that: Matcher[A1]) =
+    new Matcher[A1](x => self(x) && that(x))
 
-  def apply(a: A): Boolean = pred(a)
+  def ||[A1 <: A](that: Matcher[A1]) =
+    new Matcher[A1](x => self(x) || that(x))
+
+  def unary_![A1 <: A] =
+    new Matcher[A1](!self(_))
+
+  def apply(x: A): Boolean = pred(x)
 }
 
 object Always extends Matcher[Any](_ => true)
@@ -24,21 +31,15 @@ object EqualTo {
 object Empty extends EqualTo("")
 object IsNil extends EqualTo(null)
 
-case class InstanceOf(expectedClass: Class[_]) extends Matcher[Any](Never) {
-  override def apply(obj: Any): Boolean =
-    matchableClass.isInstance(obj)
-
-  private def matchableClass: Class[_] = {
-    if (classOf[Boolean] == expectedClass) classOf[java.lang.Boolean]
-    else if (classOf[Byte] == expectedClass) classOf[java.lang.Byte]
-    else if (classOf[Char] == expectedClass) classOf[java.lang.Character]
-    else if (classOf[Double] == expectedClass) classOf[java.lang.Double]
-    else if (classOf[Float] == expectedClass) classOf[java.lang.Float]
-    else if (classOf[Int] == expectedClass) classOf[java.lang.Integer]
-    else if (classOf[Long] == expectedClass) classOf[java.lang.Long]
-    else if (classOf[Short] == expectedClass) classOf[java.lang.Short]
-    else expectedClass
+class InstanceOf[-T : ClassTag] extends Matcher[Any] (
+  _ match {
+    case _: T => true
+    case _    => false
   }
+)
+
+object InstanceOf {
+  def apply[T : ClassTag] = new InstanceOf[T]
 }
 
 class Same[-A <: AnyRef](expected: A) extends Matcher[A] (
