@@ -11,12 +11,14 @@ class MatcherSpec extends FunSpec with Matchers {
 
   describe("Not EqualTo") {
     assertThat(1, Not(EqualTo(2)))
+    assertThat(1, !EqualTo(2))
     assertThat(1, Not(2))
   }
 
   describe("InstanceOf") {
     assertThat(2, InstanceOf(classOf[Int]))
     assertThat(2, Not(InstanceOf(classOf[String])))
+    assertThat(2, !InstanceOf(classOf[String]))
 
     assertThat("string", InstanceOf(classOf[String]))
     assertThat("string", Not(InstanceOf(classOf[Int])))
@@ -30,8 +32,8 @@ class MatcherSpec extends FunSpec with Matchers {
   }
 
   describe("AnyOf") {
-    assertThat(2, AnyOf(Never, Not(2), EqualTo(2)))
-    assertThat(2, Never || Not(2) || EqualTo(2))
+    assertThat(2, AnyOf(Never, Not(2), !EqualTo(2), EqualTo(2)))
+    assertThat(2, Never || Not(2) || !EqualTo(2) || EqualTo(2))
   }
 
   describe("AllOf") {
