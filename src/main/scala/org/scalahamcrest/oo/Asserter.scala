@@ -1,4 +1,4 @@
-package org.scalahamcrest
+package org.scalahamcrest.oo
 
 object Asserter {
   def assertThat[A](actual: A, matcher: Matcher[A]) =

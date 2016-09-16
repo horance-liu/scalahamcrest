@@ -1,8 +1,7 @@
-package org.scalahamcrest
+package org.scalahamcrest.oo
 
+import Asserter.assertThat
 import org.scalatest.{FunSpec, Matchers}
-
-import org.scalahamcrest.Asserter.assertThat
 
 class MatcherSpec extends FunSpec with Matchers {
   describe("EqualTo") {

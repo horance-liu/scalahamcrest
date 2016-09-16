@@ -1,4 +1,4 @@
-package org.scalahamcrest
+package org.scalahamcrest.oo
 
 import scala.reflect.ClassTag
 
@@ -29,7 +29,7 @@ object EqualTo {
 }
 
 object Empty extends EqualTo("")
-object IsNil extends EqualTo(null)
+object IsNil extends EqualTo[AnyRef](null)
 
 class InstanceOf[-T : ClassTag] extends Matcher[Any] (
   _ match {
